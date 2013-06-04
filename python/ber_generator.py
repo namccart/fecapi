@@ -43,7 +43,7 @@ class ber_generator(gr.hier_block2):
 		#self.generic_encoder_0 = fec.encoder(generic_encoder, gr.sizeof_char, gr.sizeof_float)
                 self.encoder_interface_0 = extended_encoder_interface(encoder_obj_list=generic_encoder, threading='capillary', puncpat=puncpat);
 		self.gaussnoise_ff_0 = fec.gaussnoise_ff(esno)
-		self.decoder_interface_0 = extended_decoder_interface(decoder_obj_list=generic_decoder, threading='capillary', ann=None, puncpat=puncpat, integration_period=10000, rotator=None, fops=None)
+		self.decoder_interface_0 = extended_decoder_interface(decoder_obj_list=generic_decoder, threading='capillary', ann=None, puncpat=puncpat, integration_period=10000, rotator=None)
 		self.ber_bb_0_0 = fec.ber_bb(berminerrors, berlimit)
 
 		##################################################
