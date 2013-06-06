@@ -2,7 +2,7 @@
 <block>
   <name>Bercurve Generator</name>
   <key>bercurve</key>
-  <category>SMOKEY.fec</category>
+  <category>FECAPI</category>
   <import>from fec.bercurve_generate import bercurve_generator</import>
   <import>import numpy</import>
   <make>bercurve_generator(
