@@ -22,6 +22,7 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 include(GrPython)
+GR_PYTHON_CHECK_MODULE("PyQt4" PyQt4 True PYQT4_FOUND)
     
 
 add_library(fec SHARED
@@ -38,13 +39,20 @@ add_library(fec SHARED
     fec_corr_bb.cc
     fec_reinflate_bb.cc
     fec_puncture_ff.cc
+    ber_sink_b_impl.cc
 )
+
+message("${GNURADIO_QTGUI_LIBRARIES}")
+message("${QT_LIBRARIES}")
 
 target_link_libraries(fec 
     ${Boost_LIBRARIES} 
-    ${GNURADIO_RUNTIME_LIBRARIES} 
     ${VOLK_LIBRARIES}
-    ${GNURADIO_CONTROLPORT_LIBRARIES}
+    ${QT_LIBRARIES}
+    ${QWT_LIBRARIES}
+    ${GNURADIO_RUNTIME_LIBRARIES}
+    ${GNURADIO_QTGUI_LIBRARIES}
+    ${GNURADIO_FFT_LIBRARIES}
     volk_fecapi
 )
 set_target_properties(fec PROPERTIES DEFINE_SYMBOL "fec_EXPORTS")

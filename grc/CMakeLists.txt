@@ -28,6 +28,8 @@ install(FILES
   extended_encoder_interface.xml
   variable_cc_decoder_def_list.xml
   variable_cc_encoder_def_list.xml
+  new_bercurve_generate.xml
+  qt_bercurve_sink.xml
   DESTINATION share/gnuradio/grc/blocks
 )
 
