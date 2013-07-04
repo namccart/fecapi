@@ -292,7 +292,7 @@ fec_ber_sink_b_impl::general_work (int noutput_items,
       }
     }
   }
-  printf("%d, %d\n", done+maxed, d_nconnections * d_residbufs_real.size());
+
   if (done+maxed == d_nconnections * d_residbufs_real.size()) {
     d_qApplication->postEvent(d_main_gui,
 			      new ConstUpdateEvent(d_residbufs_real,
@@ -331,10 +331,9 @@ fec_ber_sink_b_impl::general_work (int noutput_items,
 	  d_totalErrors[i >> 1] += compBER(inBuffer0, inBuffer1, items);
 	  d_total[i >> 1] += items;
 	  
-	  d_residbufs_imag[i/d_nconnections][i%d_nconnections >> 1] = log10(((double)d_totalErrors[i >> 1])/(d_total[i >> 1] * 8.0));
+	  d_residbufs_imag[i/(d_nconnections * 2)][(i%(d_nconnections * 2)) >> 1] = log10(((double)d_totalErrors[i >> 1])/(d_total[i >> 1] * 8.0));
 	  
 	}
-	printf("aconsuming %d, %d\n", d_total[i>>1], d_totalErrors[i>>1]);
 	consume(i, items);
 	consume(i + 1, items);
     
@@ -346,20 +345,19 @@ fec_ber_sink_b_impl::general_work (int noutput_items,
 	}
 	else if(log10(((double)d_berminerrors)/(d_total[i >> 1] * 8.0)) < d_berLimit) {
 	  printf("crapout\n");
-	  d_residbufs_imag[i/d_nconnections][i%d_nconnections >> 1] = d_berLimit;
+	  d_residbufs_imag[i/(d_nconnections * 2)][(i%(d_nconnections * 2)) >> 1] = d_berLimit;
 	  d_totalErrors[i >> 1] = d_berminerrors + 1;
 	}
 	
       
     }
     else {
-      //printf("bconsuming %d\n", ninput_items[i]);
       consume(i, ninput_items[i]);
       consume(i+1, ninput_items[i+1]);
     }
   
   }
-  printf("returning\n");
+
   return 0;
   
 }
