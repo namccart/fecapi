@@ -51,18 +51,14 @@
   <type>string</type>
 </param>
 
-
+<bus_source>1</bus_source>
 
 <source>
   <name>out</name>
   <type>byte</type>
   <nports>len($esno)*2</nports>
 </source>
-<source>
-  <name>bus</name>
-  <type>bus</type>
-  <nports>1</nports>
-</source>
+
 
 <doc>
   The GUI hint can be used to position the widget within the application. \

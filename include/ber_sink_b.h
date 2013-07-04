@@ -33,7 +33,7 @@
 class fec_ber_sink_b;
 typedef boost::shared_ptr<fec_ber_sink_b> fec_ber_sink_b_sptr;
 
-FEC_API fec_ber_sink_b_sptr fec_make_ber_sink_b(std::vector<float> esnos, int berminerrors = 100, float berLimit = -7.0, QWidget *parent=NULL);
+FEC_API fec_ber_sink_b_sptr fec_make_ber_sink_b(std::vector<float> esnos, int curves = 1, int berminerrors = 100, float berLimit = -7.0, QWidget *parent=NULL);
 
 
 

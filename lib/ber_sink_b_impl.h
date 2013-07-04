@@ -35,8 +35,8 @@
     
 class FEC_API fec_ber_sink_b_impl : public fec_ber_sink_b {
  private:
-  friend fec_ber_sink_b_sptr fec_make_ber_sink_b(std::vector<float> esnos, int berminerrors, float berLimit, QWidget *parent);
-  fec_ber_sink_b_impl(std::vector<float> esnos, int berminerrors = 100, float berLimit = -7.0, QWidget *parent=NULL);
+  friend fec_ber_sink_b_sptr fec_make_ber_sink_b(std::vector<float> esnos, int curves, int berminerrors, float berLimit, QWidget *parent);
+  fec_ber_sink_b_impl(std::vector<float> esnos, int curves = 1, int berminerrors = 100, float berLimit = -7.0, QWidget *parent=NULL);
 
   void initialize();
   

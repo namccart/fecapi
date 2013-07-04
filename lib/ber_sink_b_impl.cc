@@ -30,40 +30,41 @@
 
 
 fec_ber_sink_b_sptr
-fec_make_ber_sink_b(std::vector<float> esnos, int berminerrors, float berLimit, QWidget *parent)
+fec_make_ber_sink_b(std::vector<float> esnos, int curves, int berminerrors, float berLimit, QWidget *parent)
 {
-  return gnuradio::get_initial_sptr(new fec_ber_sink_b_impl(esnos, berminerrors, berLimit, parent));
+  return gnuradio::get_initial_sptr(new fec_ber_sink_b_impl(esnos, curves, berminerrors, berLimit, parent));
 }
 
-fec_ber_sink_b_impl::fec_ber_sink_b_impl(std::vector<float> esnos, int berminerrors, float berLimit, QWidget *parent)
+fec_ber_sink_b_impl::fec_ber_sink_b_impl(std::vector<float> esnos, int curves, int berminerrors, float berLimit, QWidget *parent)
   : gr::block("fec_ber_sink_b",
-	      gr::io_signature::make(esnos.size() * 2, esnos.size() * 2, sizeof(unsigned char)),
+	      gr::io_signature::make(curves * esnos.size() * 2, curves * esnos.size() * 2, sizeof(unsigned char)),
 	      gr::io_signature::make(0, 0, 0)),
     d_berminerrors(berminerrors), 
     d_berLimit(berLimit), 
-    d_nconnections(esnos.size()),
     d_parent(parent),
+    d_nconnections(esnos.size()),
     d_last_time(0)
 {
   d_main_gui = NULL;
   
   
+  d_residbufs_real.reserve(curves);
+  d_residbufs_imag.reserve(curves);
+  d_total.reserve(curves * esnos.size());
+  d_totalErrors.reserve(curves * esnos.size());
   
-  d_residbufs_real.reserve(1);
-  d_residbufs_imag.reserve(1);
-  d_total.reserve(esnos.size());
-  d_totalErrors.reserve(esnos.size());
-  
-  d_residbufs_real.push_back(gr::fft::malloc_double(esnos.size()));
-  d_residbufs_imag.push_back(gr::fft::malloc_double(esnos.size()));
-
-  for(int i = 0; i < d_nconnections; i++) {
+  for (int j= 0; j < curves; j++) {
+    d_residbufs_real.push_back(gr::fft::malloc_double(esnos.size()));
+    d_residbufs_imag.push_back(gr::fft::malloc_double(esnos.size()));
+    for(int i = 0; i < d_nconnections; i++) {
     
-    d_residbufs_real[0][i] = esnos[i];
-    d_residbufs_imag[0][i] = 0.0;
-    d_total.push_back(0);
-    d_totalErrors.push_back(1);
+      d_residbufs_real[j][i] = esnos[i];
+      d_residbufs_imag[j][i] = 0.0;
+      d_total.push_back(0);
+      d_totalErrors.push_back(1);
+    }
   }
+  
   
   initialize();
   set_line_width(0,1);
@@ -75,16 +76,17 @@ fec_ber_sink_b_impl::~fec_ber_sink_b_impl() {
     d_main_gui->close();
   }
 
-  
-  gr::fft::free(d_residbufs_real[0]);
-  gr::fft::free(d_residbufs_imag[0]);
-  
+  for(int i = 0; i < d_residbufs_real.size(); i++) {
+    gr::fft::free(d_residbufs_real[i]);
+    gr::fft::free(d_residbufs_imag[i]);
+    
+  }
 }
 
 bool
 fec_ber_sink_b_impl::check_topology(int ninputs, int noutputs)
 {
-  return ninputs == d_nconnections * 2;
+  return ninputs == d_residbufs_real.size() * d_nconnections * 2;
 }
 
 void
@@ -279,21 +281,24 @@ fec_ber_sink_b_impl::general_work (int noutput_items,
   
   //check stopping condition
   int done=0, maxed=0;
-  for(int i = 0; i < d_nconnections; ++i) {
+  for(int j = 0; j < d_residbufs_real.size(); ++j) {
+    for(int i = 0; i < d_nconnections; ++i) {
     
-    if (d_totalErrors[i] >= d_berminerrors) {
-      done++;
-    }
-    else if(log10(((double)d_berminerrors)/(d_total[i] * 8.0)) < d_berLimit) {
-      maxed++;
+      if (d_totalErrors[j * d_nconnections + i] >= d_berminerrors) {
+	done++;
+      }
+      else if(log10(((double)d_berminerrors)/(d_total[j * d_nconnections + i] * 8.0)) < d_berLimit) {
+	maxed++;
+      }
     }
   }
-  
-  if (done+maxed == d_nconnections) {
+  printf("%d, %d\n", done+maxed, d_nconnections * d_residbufs_real.size());
+  if (done+maxed == d_nconnections * d_residbufs_real.size()) {
     d_qApplication->postEvent(d_main_gui,
 			      new ConstUpdateEvent(d_residbufs_real,
 						   d_residbufs_imag,
 						   d_nconnections));
+
     return -1;
   }
   
@@ -311,7 +316,7 @@ fec_ber_sink_b_impl::general_work (int noutput_items,
     
     
     if ((d_totalErrors[i >> 1] < d_berminerrors) && (log10(((double)d_berminerrors)/(d_total[i >> 1] * 8.0)) >= d_berLimit)) {
-    
+      
 	int items = ninput_items[i] <= ninput_items[i+1] ? ninput_items[i] : ninput_items[i+1];
 
 	    
@@ -326,9 +331,10 @@ fec_ber_sink_b_impl::general_work (int noutput_items,
 	  d_totalErrors[i >> 1] += compBER(inBuffer0, inBuffer1, items);
 	  d_total[i >> 1] += items;
 	  
-	  d_residbufs_imag[0][i >> 1] = log10(((double)d_totalErrors[i >> 1])/(d_total[i >> 1] * 8.0));
+	  d_residbufs_imag[i/d_nconnections][i%d_nconnections >> 1] = log10(((double)d_totalErrors[i >> 1])/(d_total[i >> 1] * 8.0));
 	  
 	}
+	printf("aconsuming %d, %d\n", d_total[i>>1], d_totalErrors[i>>1]);
 	consume(i, items);
 	consume(i + 1, items);
     
@@ -340,18 +346,20 @@ fec_ber_sink_b_impl::general_work (int noutput_items,
 	}
 	else if(log10(((double)d_berminerrors)/(d_total[i >> 1] * 8.0)) < d_berLimit) {
 	  printf("crapout\n");
-	  d_residbufs_imag[0][i >> 1] = d_berLimit;
+	  d_residbufs_imag[i/d_nconnections][i%d_nconnections >> 1] = d_berLimit;
 	  d_totalErrors[i >> 1] = d_berminerrors + 1;
 	}
 	
       
     }
     else {
+      //printf("bconsuming %d\n", ninput_items[i]);
       consume(i, ninput_items[i]);
       consume(i+1, ninput_items[i+1]);
     }
   
   }
+  printf("returning\n");
   return 0;
   
 }

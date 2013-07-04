@@ -15,6 +15,7 @@
 	<make>#set $win = 'self._%s_win'%$id
 fec.ber_sink_b(
         $esno, \#range of esnos
+	$num_curves, \#number of curves
 	$berminerrors, \#ensure at least
 	$berlimit, \#cutoff
 )
@@ -47,6 +48,13 @@ $(gui_hint()($win))</make>
 
 
   <param>
+    <name>Num Curves</name>
+    <key>num_curves</key>
+    <value>1</value>
+    <type>int</type>
+  </param>
+
+  <param>
     <name>Y min</name>
     <key>ymin</key>
     <value>-10</value>
@@ -74,16 +82,15 @@ $(gui_hint()($win))</make>
     <type>gui_hint</type>
     <hide>part</hide>
   </param>
+  
   <sink>
     <name>out</name>
     <type>byte</type>
-    <nports>len($esno)*2</nports>
+    <nports>len($esno)*2*$num_curves</nports>  
   </sink>  
-  <sink>
-    <name>bus</name>
-    <type>bus</type>
-    <nports>1</nports>
-  </sink>
+
+  <bus_structure_sink>map(lambda b: map(lambda a: b * len($esno) * 2 + a, range(len($esno)*2)), range($num_curves))</bus_structure_sink>
+
   <doc>
     The GUI hint can be used to position the widget within the application. \
     The hint is of the form [tab_id@tab_index]: [row, col, row_span, col_span]. \
