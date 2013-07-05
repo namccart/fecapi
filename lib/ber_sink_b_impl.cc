@@ -53,7 +53,7 @@ fec_ber_sink_b_impl::fec_ber_sink_b_impl(std::vector<float> esnos, int curves, i
   d_total.reserve(curves * esnos.size());
   d_totalErrors.reserve(curves * esnos.size());
   
-  for (int j= 0; j < curves; j++) {
+  for(int j= 0; j < curves; j++) {
     d_residbufs_real.push_back(gr::fft::malloc_double(esnos.size()));
     d_residbufs_imag.push_back(gr::fft::malloc_double(esnos.size()));
     for(int i = 0; i < d_nconnections; i++) {
@@ -67,8 +67,13 @@ fec_ber_sink_b_impl::fec_ber_sink_b_impl(std::vector<float> esnos, int curves, i
   
   
   initialize();
-  set_line_width(0,1);
-  set_line_style(0,1);
+  for(int j= 0; j < curves; j++) {
+    set_line_width(j, 1);
+    //35 unique styles supported
+    set_line_style(j, (j%5) + 1);
+    set_line_marker(j, (j%7));
+    
+  }
 }
 
 fec_ber_sink_b_impl::~fec_ber_sink_b_impl() {
@@ -101,7 +106,7 @@ fec_ber_sink_b_impl::initialize()
     d_qApplication = new QApplication(argc, argv);
   }
   
-  d_main_gui = new ConstellationDisplayForm(1, d_parent);
+  d_main_gui = new ConstellationDisplayForm(d_residbufs_real.size(), d_parent);
 
   d_main_gui->setNPoints(d_nconnections);
   d_main_gui->getPlot()->setAxisTitle(QwtPlot::yLeft, "LogScale BER");
