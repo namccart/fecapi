@@ -18,6 +18,7 @@ fec.ber_sink_b(
 	$num_curves, \#number of curves
 	$berminerrors, \#ensure at least
 	$berlimit, \#cutoff
+	$curvenames, \#indiv. curve names
 )
 self.$(id).set_update_time($update_time)
 self.$(id).set_y_axis($ymin, $ymax)
@@ -53,6 +54,16 @@ $(gui_hint()($win))</make>
     <value>1</value>
     <type>int</type>
   </param>
+
+  <param>
+    <name>Curve Names</name>
+    <key>curvenames</key>
+    <value>[]</value>
+    <type>raw</type>
+    <hide>part</hide>
+  </param>
+
+
 
   <param>
     <name>Y min</name>

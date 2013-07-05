@@ -29,13 +29,14 @@
 #include <math.h>
 
 
+
 fec_ber_sink_b_sptr
-fec_make_ber_sink_b(std::vector<float> esnos, int curves, int berminerrors, float berLimit, QWidget *parent)
+fec_make_ber_sink_b(std::vector<float> esnos, int curves, int berminerrors, float berLimit, std::vector<std::string> curvenames, QWidget *parent)
 {
-  return gnuradio::get_initial_sptr(new fec_ber_sink_b_impl(esnos, curves, berminerrors, berLimit, parent));
+  return gnuradio::get_initial_sptr(new fec_ber_sink_b_impl(esnos, curves, berminerrors, berLimit, curvenames, parent));
 }
 
-fec_ber_sink_b_impl::fec_ber_sink_b_impl(std::vector<float> esnos, int curves, int berminerrors, float berLimit, QWidget *parent)
+fec_ber_sink_b_impl::fec_ber_sink_b_impl(std::vector<float> esnos, int curves, int berminerrors, float berLimit, std::vector<std::string> curvenames, QWidget *parent)
   : gr::block("fec_ber_sink_b",
 	      gr::io_signature::make(curves * esnos.size() * 2, curves * esnos.size() * 2, sizeof(unsigned char)),
 	      gr::io_signature::make(0, 0, 0)),
@@ -73,6 +74,13 @@ fec_ber_sink_b_impl::fec_ber_sink_b_impl(std::vector<float> esnos, int curves, i
     set_line_style(j, (j%5) + 1);
     set_line_marker(j, (j%7));
     
+  }
+  if(curvenames.size() == curves) {
+    for(int j = 0; j < curves; j++) {
+      if (curvenames[j] != "") {
+	set_line_label(j, curvenames[j]);
+      }
+    }
   }
 }
 
