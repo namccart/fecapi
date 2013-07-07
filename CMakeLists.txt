@@ -101,7 +101,7 @@ endif()
 # Find gnuradio build dependencies
 ########################################################################
 
-set(GR_REQUIRED_MODULES RUNTIME QTGUI FFT)
+set(GR_REQUIRED_COMPONENTS RUNTIME QTGUI FFT)
 find_package(Gnuradio)
 find_package(Volk)
 
