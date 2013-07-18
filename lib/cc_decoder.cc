@@ -361,6 +361,16 @@ int cc_decoder::chainback_viterbi(DECISIONTYPE* data, unsigned int nbits, unsign
 }
 
 
+void cc_decoder::set_framebits(int framebits){
+    d_framebits = framebits;
+    if(d_tailbiting) {
+        d_veclen = d_framebits + (6 * (d_k - 1));
+    } else if(d_truncated) {
+        d_veclen = d_framebits;
+    } else {
+        d_veclen = d_framebits + d_k - 1;
+    }
+}
 
 void cc_decoder::generic_work(void *inBuffer, void *outBuffer)   
 {

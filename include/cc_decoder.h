@@ -26,11 +26,7 @@ class FEC_API cc_decoder : public generic_decoder
     friend generic_decoder_sptr
 	cc_make_decoder (int framebits, int k, int rate, std::vector<int> polys, int start_state, int end_state, bool tailbiting, bool terminated, bool truncated, bool streaming);
 
-    //private ctor
-    cc_decoder (int framebits, int k, int rate, std::vector<int> polys, int start_state, int end_state, bool tailbiting, bool terminated, bool truncated, bool streaming);
-
     //plug into the generic fec api
-    void generic_work(void *inBuffer, void *outbuffer);
     int get_output_size();
     int get_input_size();
     int get_history();
@@ -81,6 +77,9 @@ class FEC_API cc_decoder : public generic_decoder
 
 
  public:
+    void set_framebits(int framebits);
+    void generic_work(void *inBuffer, void *outbuffer);
+    cc_decoder (int framebits, int k, int rate, std::vector<int> polys, int start_state, int end_state, bool tailbiting, bool terminated, bool truncated, bool streaming);
     ~cc_decoder ();
     
     
