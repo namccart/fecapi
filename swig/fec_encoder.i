@@ -2,6 +2,7 @@
 
 %{
 #include "fec_encoder.h"
+#include "generic_encoder.h"
 %}
 
 %nodefaultctor generic_encoder;

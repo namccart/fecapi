@@ -2,7 +2,7 @@
 
 %{
 #include "fec_decoder.h"
-
+#include "generic_decoder.h"
 %}
 
 

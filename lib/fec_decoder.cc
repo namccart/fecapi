@@ -26,90 +26,11 @@
 #include <gnuradio/io_signature.h>
 #include <stdio.h>
 
-generic_decoder::~generic_decoder() {;}
-int generic_decoder::get_history() {
-    return 0;
-}
-float generic_decoder::get_shift() {
-    return 0.0;
-}
-const char* generic_decoder::get_conversion() {
-    return "none";
-}
-const char* generic_decoder::get_output_conversion() {
-    return "none";
-}
-int generic_decoder::get_input_item_size() {
-    return 4;
-}
-int generic_decoder::get_output_item_size() {
-    return 1;
-}
-
-int generic_decoder::base_unique_id = 1;
-int generic_decoder::unique_id() {
-  return my_id;
-}
-generic_decoder::generic_decoder(std::string name) {
-  d_name = name;
-  my_id = base_unique_id++;
-}
 
 fec_decoder_sptr
 fec_make_decoder(generic_decoder_sptr my_decoder, size_t input_item_size, size_t output_item_size)
 {
     return gnuradio::get_initial_sptr( new fec_decoder(my_decoder, input_item_size, output_item_size));
-}
-
-int
-fec_get_decoder_output_size(generic_decoder_sptr my_decoder)
-{
-    return my_decoder->get_output_size();
-}
-
-int
-fec_get_history(generic_decoder_sptr my_decoder)
-{
-    return my_decoder->get_history();
-}
-
-int
-fec_get_decoder_input_size(generic_decoder_sptr my_decoder)
-{
-    return my_decoder->get_input_size();
-}
-
-int
-fec_get_decoder_output_item_size(generic_decoder_sptr my_decoder)
-{
-    return my_decoder->get_output_item_size();
-}
-
-int
-fec_get_decoder_input_item_size(generic_decoder_sptr my_decoder)
-{
-    return my_decoder->get_input_item_size();
-}
-
-
-
-
-float
-fec_get_shift(generic_decoder_sptr my_decoder)
-{
-    return my_decoder->get_shift();
-}
-
-const char*
-fec_get_conversion(generic_decoder_sptr my_decoder)
-{
-    return my_decoder->get_conversion();
-}
-
-const char*
-fec_get_output_conversion(generic_decoder_sptr my_decoder)
-{
-    return my_decoder->get_output_conversion();
 }
 
 
@@ -198,3 +119,4 @@ fec_decoder::general_work (int noutput_items,
     
 
 }
+

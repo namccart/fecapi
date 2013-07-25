@@ -4,29 +4,16 @@
 #include <gnuradio/block.h>
 #include <fec_api.h>
 #include <boost/shared_ptr.hpp>
+#include <generic_encoder.h>
 
 
 
-class FEC_API generic_encoder{
- protected:
-    friend class fec_encoder;
-    virtual void generic_work(void *inBuffer, void *outBuffer) = 0;
- public:
-    virtual int get_input_size() = 0;
-    virtual int get_output_size() = 0;
-    virtual ~generic_encoder();
- 
-    
-};
-
-typedef boost::shared_ptr<generic_encoder> generic_encoder_sptr;
 
 class fec_encoder;
 typedef boost::shared_ptr<fec_encoder> fec_encoder_sptr;
 
 FEC_API fec_encoder_sptr fec_make_encoder(generic_encoder_sptr my_encoder, size_t input_item_size, size_t output_item_size);
-FEC_API int fec_get_encoder_output_size(generic_encoder_sptr my_encoder);
-FEC_API int fec_get_encoder_input_size(generic_encoder_sptr my_encoder);
+
 
 
 class FEC_API fec_encoder : public gr::block

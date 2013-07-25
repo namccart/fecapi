@@ -20,9 +20,9 @@
 ########################################################################
 # Setup library
 ########################################################################
-include(GrPlatform) #define LIB_SUFFIX
-include(GrPython)
-GR_PYTHON_CHECK_MODULE("PyQt4" PyQt4 True PYQT4_FOUND)
+#include(GrPlatform) #define LIB_SUFFIX
+#include(GrPython)
+#GR_PYTHON_CHECK_MODULE("PyQt4" PyQt4 True PYQT4_FOUND)
     
 
 add_library(fec SHARED
@@ -35,6 +35,8 @@ add_library(fec SHARED
     fec_interleave.cc
     fec_deinterleave.cc
     cc_decoder.cc
+    generic_decoder.cc
+    generic_encoder.cc
     cc_encoder.cc
     fec_corr_bb.cc
     fec_reinflate_bb.cc

@@ -26,7 +26,7 @@
 #include <gnuradio/io_signature.h>
 #include <stdio.h>
 
-generic_encoder::~generic_encoder() {;}
+
 
 
 fec_encoder_sptr
@@ -35,17 +35,6 @@ fec_make_encoder(generic_encoder_sptr my_encoder, size_t input_item_size, size_t
     return gnuradio::get_initial_sptr( new fec_encoder(my_encoder, input_item_size, output_item_size));
 }
 
-int
-fec_get_encoder_output_size(generic_encoder_sptr my_encoder)
-{
-    return my_encoder->get_output_size();
-}
-
-int
-fec_get_encoder_input_size(generic_encoder_sptr my_encoder)
-{
-    return my_encoder->get_input_size();
-}
 
 
 
