@@ -1,13 +1,11 @@
 #include <cc_encoder.h>
 #include <math.h>
 #include <boost/assign/list_of.hpp>
-#include <volk_typedefs.h>
-#include <volk.h>
 #include <sstream>
 #include <stdio.h>
 #include <vector>
-#include <fec_encoder.h>
-#include <cc_common.h>
+
+
 
 
 generic_encoder_sptr

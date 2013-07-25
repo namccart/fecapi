@@ -4,7 +4,7 @@
 
 #include <map>
 #include <string>
-#include <fec_encoder.h>
+#include <generic_encoder.h>
 #include <cc_common.h>
 
 

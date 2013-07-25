@@ -6,8 +6,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <vector>
-#include <fec_decoder.h>
-#include <cc_common.h>
+
 
 
 generic_decoder_sptr
