@@ -27,7 +27,7 @@ enable_testing()
 
 #select the release build type by default to get optimization flags
 if(NOT CMAKE_BUILD_TYPE)
-   set(CMAKE_BUILD_TYPE "Release")
+   set(CMAKE_BUILD_TYPE "RelWithDebInfo")
    message(STATUS "Build type not specified: defaulting to release.")
 endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
@@ -101,10 +101,15 @@ endif()
 # Find gnuradio build dependencies
 ########################################################################
 
-set(GR_REQUIRED_MODULES RUNTIME)
+set(GR_REQUIRED_COMPONENTS RUNTIME QTGUI FFT)
 find_package(Gnuradio)
 find_package(Volk)
 
+find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui)
+
+find_package(Qwt)
+
+find_package(PythonLibs)
 
 
 
@@ -116,11 +121,9 @@ if(NOT VOLK_FOUND)
     message(FATAL_ERROR "GnuRadio Volk required to compile fec")
 endif()
 
-#if(NOT VOLK_FECAPI_FOUND)
-#    message(FATAL_ERROR "GnuRadio Volk required to compile fec")
-#endif()
 
 
+include(GrSetupQt4)
 
 ########################################################################
 # Setup the include and linker paths
@@ -133,12 +136,22 @@ include_directories(
     ${GNURADIO_RUNTIME_INCLUDE_DIRS}
     ${VOLK_INCLUDE_DIRS}
     ${PMT_INCLUDE_DIRS}
+    ${QT_INCLUDE_DIRS}
+    ${QWT_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIRS}
+    ${GNURADIO_QTGUI_INCLUDE_DIRS}
+    ${GNURADIO_FFT_INCLUDE_DIRS}
 )
 
 link_directories(
     ${Boost_LIBRARY_DIRS}
     ${GNURADIO_RUNTIME_LIBRARY_DIRS}
     ${VOLK_LIBRARY_DIRS}
+    ${QT_LIBRARY_DIRS}
+    ${QWT_LIBRARY_DIRS}
+    ${PYTHON_LIBRARY_DIRS}
+    ${GNURADIO_QTGUI_LIBRARY_DIRS}
+    ${GNURADIO_FFT_LIBRARY_DIRS}
 )
 
 

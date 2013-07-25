@@ -40,7 +40,7 @@ if _RTLD_GLOBAL != 0:
 from fec_swig import *;
 
 # import any pure python here
-
+from new_bercurve_generate import new_bercurve_generator
 #
 
 # ----------------------------------------------------------------

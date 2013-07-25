@@ -42,6 +42,8 @@ GR_PYTHON_INSTALL(
     capillary_threaded_encoder.py
     extended_encoder_interface.py
     bitflip.py
+    fec_test.py
+    new_bercurve_generate.py
     DESTINATION ${GR_PYTHON_DIR}/fec
 )
 
