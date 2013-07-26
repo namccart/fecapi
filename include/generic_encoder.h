@@ -1,9 +1,10 @@
 #ifndef INCLUDED_GENERIC_ENCODER_H
 #define INCLUDED_GENERIC_ENCODER_H
 
-#include <gnuradio/block.h>
+
 #include <fec_api.h>
 #include <boost/shared_ptr.hpp>
+#include <vector>
 
 
 
