@@ -29,5 +29,6 @@ install(FILES
     fec_interleave.h
     fec_deinterleave.h
     cc_encoder.h
+    cc_decoder.h
     DESTINATION include/fec
 )
