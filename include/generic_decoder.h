@@ -1,7 +1,7 @@
 #ifndef INCLUDED_GENERIC_DECODER_H
 #define INCLUDED_GENERIC_DECODER_H
 
-#include <gnuradio/block.h>
+
 #include <fec_api.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
@@ -28,8 +28,6 @@ class FEC_API generic_decoder {
     virtual int get_output_item_size();
     virtual const char* get_output_conversion();
     virtual ~generic_decoder();
-    void forecast(int noutput_items,
-		  gr_vector_int& ninput_items_required);
     generic_decoder(std::string name);
     
 };
