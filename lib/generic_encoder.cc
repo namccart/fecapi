@@ -23,7 +23,6 @@
 
 
 #include <generic_encoder.h>
-#include <gnuradio/io_signature.h>
 #include <stdio.h>
 
 generic_encoder::~generic_encoder() {;}

@@ -72,13 +72,20 @@ set(Boost_ADDITIONAL_VERSIONS
     "1.65.0" "1.65" "1.66.0" "1.66" "1.67.0" "1.67" "1.68.0" "1.68" "1.69.0" "1.69"
 )
 
+
 IF(NOT DEFINED BOOST_ROOT)
     SET(BOOST_ROOT "")
 ENDIF()
 SET(BOOST_ROOT ${BOOST_ROOT} CACHE STRING "Modify search path for Boost components")
 
 #after caching user-defined value, make sure to add the install prefix
-SET(BOOST_ROOT ${BOOST_ROOT}:${CMAKE_INSTALL_PREFIX})
+IF("${BOOST_ROOT}" STREQUAL "")
+  message("-- Looking into CMAKE_INSTALL_PREFIX for BOOST")
+  SET(BOOST_ROOT ${CMAKE_INSTALL_PREFIX}:${BOOST_ROOT})
+ELSE()
+  message("looking into BOOST_ROOT for BOOST")
+  SET(BOOST_ROOT ${BOOST_ROOT}:${CMAKE_INSTALL_PREFIX})
+ENDIF()
 
 set(BOOST_REQUIRED_COMPONENTS
     system
@@ -129,6 +136,7 @@ include(GrSetupQt4)
 # Setup the include and linker paths
 ########################################################################
 include_directories(
+	${CMAKE_INSTALL_PREFIX}/include
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_BINARY_DIR}/volk_fecapi/include
     ${CMAKE_SOURCE_DIR}/volk_fecapi/include
