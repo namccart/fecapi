@@ -27,24 +27,25 @@ enable_testing()
 
 #select the release build type by default to get optimization flags
 if(NOT CMAKE_BUILD_TYPE)
-   set(CMAKE_BUILD_TYPE "RelWithDebInfo")
-   message(STATUS "Build type not specified: defaulting to release.")
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo")
+    message(STATUS "Build type not specified: defaulting to release.")
 endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
 
 
 configure_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CMakeUninstall.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/cmake/Modules/CMakeUninstall.cmake"
-  @ONLY
-)
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CMakeUninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake/Modules/CMakeUninstall.cmake"
+    @ONLY
+    )
 
 add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/Modules/CMakeUninstall.cmake"
-)
+    "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/Modules/CMakeUninstall.cmake"
+    )
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/share/gnuradio/cmake/Modules)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/share/gnuradio/cmake/Modules
+    )
 
 ########################################################################
 # Compiler specific setup
@@ -70,7 +71,7 @@ set(Boost_ADDITIONAL_VERSIONS
     "1.55.0" "1.55" "1.56.0" "1.56" "1.57.0" "1.57" "1.58.0" "1.58" "1.59.0" "1.59"
     "1.60.0" "1.60" "1.61.0" "1.61" "1.62.0" "1.62" "1.63.0" "1.63" "1.64.0" "1.64"
     "1.65.0" "1.65" "1.66.0" "1.66" "1.67.0" "1.67" "1.68.0" "1.68" "1.69.0" "1.69"
-)
+    )
 
 
 IF(NOT DEFINED BOOST_ROOT)
@@ -80,11 +81,11 @@ SET(BOOST_ROOT ${BOOST_ROOT} CACHE STRING "Modify search path for Boost componen
 
 #after caching user-defined value, make sure to add the install prefix
 IF("${BOOST_ROOT}" STREQUAL "")
-  message("-- Looking into CMAKE_INSTALL_PREFIX for BOOST")
-  SET(BOOST_ROOT ${CMAKE_INSTALL_PREFIX}:${BOOST_ROOT})
+    message("-- Looking into CMAKE_INSTALL_PREFIX for BOOST")
+    SET(BOOST_ROOT ${CMAKE_INSTALL_PREFIX}:${BOOST_ROOT})
 ELSE()
-  message("looking into BOOST_ROOT for BOOST")
-  SET(BOOST_ROOT ${BOOST_ROOT}:${CMAKE_INSTALL_PREFIX})
+    message("looking into BOOST_ROOT for BOOST")
+    SET(BOOST_ROOT ${BOOST_ROOT}:${CMAKE_INSTALL_PREFIX})
 ENDIF()
 
 set(BOOST_REQUIRED_COMPONENTS
@@ -92,7 +93,7 @@ set(BOOST_REQUIRED_COMPONENTS
     thread
     )
 
-    find_package(Boost "1.35" COMPONENTS ${BOOST_REQUIRED_COMPONENTS})
+find_package(Boost "1.35" COMPONENTS ${BOOST_REQUIRED_COMPONENTS})
 
 
 if(NOT Boost_FOUND)
