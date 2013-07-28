@@ -2,11 +2,11 @@
 #define INCLUDED_FEC_DECODER_H
 
 #include <gnuradio/block.h>
-#include <fec_api.h>
+#include <fec/fec_api.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/format.hpp>
-#include <generic_decoder.h>
+#include <fec/generic_decoder.h>
 
 
 

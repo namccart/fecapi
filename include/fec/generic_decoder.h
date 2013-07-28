@@ -2,7 +2,7 @@
 #define INCLUDED_GENERIC_DECODER_H
 
 
-#include <fec_api.h>
+#include <fec/fec_api.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/format.hpp>

@@ -20,44 +20,60 @@
 ########################################################################
 # Setup library
 ########################################################################
-#include(GrPlatform) #define LIB_SUFFIX
-#include(GrPython)
-#GR_PYTHON_CHECK_MODULE("PyQt4" PyQt4 True PYQT4_FOUND)
+
     
 
 add_library(fec SHARED
-    libbertools.cc
-    fec_random_gen_b.cc
-    fec_encoder.cc
-    fec_gaussnoise_ff.cc
-    fec_decoder.cc
-    fec_ber_bb.cc
-    fec_interleave.cc
-    fec_deinterleave.cc
     cc_decoder.cc
     generic_decoder.cc
     generic_encoder.cc
     cc_encoder.cc
-    fec_corr_bb.cc
-    fec_reinflate_bb.cc
-    fec_puncture_ff.cc
-    ber_sink_b_impl.cc
 )
-
-message("${GNURADIO_QTGUI_LIBRARIES}")
-message("${QT_LIBRARIES}")
 
 target_link_libraries(fec 
     ${Boost_LIBRARIES} 
-    ${VOLK_LIBRARIES}
-    ${QT_LIBRARIES}
-    ${QWT_LIBRARIES}
-    ${GNURADIO_RUNTIME_LIBRARIES}
-    ${GNURADIO_QTGUI_LIBRARIES}
-    ${GNURADIO_FFT_LIBRARIES}
     volk_fecapi
 )
 set_target_properties(fec PROPERTIES DEFINE_SYMBOL "fec_EXPORTS")
+
+
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    include(GrPlatform) #define LIB_SUFFIX
+    include(GrPython)
+    GR_PYTHON_CHECK_MODULE("PyQt4" PyQt4 True PYQT4_FOUND)
+    
+    add_library(gr-fec SHARED
+        libbertools.cc
+        fec_random_gen_b.cc
+        fec_encoder.cc
+        fec_gaussnoise_ff.cc
+        fec_decoder.cc
+        fec_ber_bb.cc
+        fec_interleave.cc
+        fec_deinterleave.cc
+        fec_corr_bb.cc
+        fec_reinflate_bb.cc
+        fec_puncture_ff.cc
+        ber_sink_b_impl.cc
+        )
+
+    target_link_libraries(gr-fec 
+        ${Boost_LIBRARIES} 
+        ${VOLK_LIBRARIES}
+        ${QT_LIBRARIES}
+        ${QWT_LIBRARIES}
+        ${GNURADIO_RUNTIME_LIBRARIES}
+        ${GNURADIO_QTGUI_LIBRARIES}
+        ${GNURADIO_FFT_LIBRARIES}
+        volk_fecapi
+        fec
+        )
+    set_target_properties(gr-fec PROPERTIES DEFINE_SYMBOL "fec_EXPORTS")
+    
+ENDIF()
+
+
+
 
 
 ########################################################################
@@ -77,13 +93,26 @@ install(TARGETS fec
     RUNTIME DESTINATION bin              # .dll file
 )
 
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    install(TARGETS gr-fec
+        LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
+        ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
+        RUNTIME DESTINATION bin              # .dll file
+        )
+ENDIF()
+
 ########################################################################
 # Build and register unit test
 ########################################################################
 find_package(Boost COMPONENTS unit_test_framework)
 
-include(GrTest)
-set(GR_TEST_TARGET_DEPS fec)
+
+
+
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    include(GrTest)
+    set(GR_TEST_TARGET_DEPS gr-fec)
+ENDIF()
 #turn each test cpp file into an executable with an int main(t) function
 add_definitions(-DBOOST_TEST_DYN_LINK -DBOOST_TEST_MAIN)
 

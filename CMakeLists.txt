@@ -114,24 +114,22 @@ find_package(Gnuradio)
 find_package(Volk)
 
 find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui)
-
 find_package(Qwt)
-
 find_package(PythonLibs)
 
 
-
-if(NOT GNURADIO_RUNTIME_FOUND)
-    message(FATAL_ERROR "GnuRadio Runtime required to compile fec")
-endif()
-
-if(NOT VOLK_FOUND)
-    message(FATAL_ERROR "GnuRadio Volk required to compile fec")
+SET(CAN_HAS_GNURADIO 'YESS!')
+if((NOT GNURADIO_RUNTIME_FOUND) OR (NOT QT4_QTCORE FOUND) OR (NOT QWT_FOUND) OR (NOT PYTHONLIBS_FOUND))
+    message("I CAN'T HAS GNURADIO!")
+    SET(CAN_HAS_GNURADIO 'NOO!')
 endif()
 
 
 
-include(GrSetupQt4)
+
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    include(GrSetupQt4)
+ENDIF()
 
 ########################################################################
 # Setup the include and linker paths
@@ -139,39 +137,65 @@ include(GrSetupQt4)
 include_directories(
 	${CMAKE_INSTALL_PREFIX}/include
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/fec
     ${CMAKE_BINARY_DIR}/volk_fecapi/include
     ${CMAKE_SOURCE_DIR}/volk_fecapi/include
     ${Boost_INCLUDE_DIRS}
-    ${GNURADIO_RUNTIME_INCLUDE_DIRS}
-    ${VOLK_INCLUDE_DIRS}
-    ${PMT_INCLUDE_DIRS}
-    ${QT_INCLUDE_DIRS}
-    ${QWT_INCLUDE_DIRS}
-    ${PYTHON_INCLUDE_DIRS}
-    ${GNURADIO_QTGUI_INCLUDE_DIRS}
-    ${GNURADIO_FFT_INCLUDE_DIRS}
-)
+    )
+
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    include_directories(
+        ${GNURADIO_RUNTIME_INCLUDE_DIRS}
+        ${VOLK_INCLUDE_DIRS}
+        ${PMT_INCLUDE_DIRS}
+        ${QT_INCLUDE_DIRS}
+        ${QWT_INCLUDE_DIRS}
+        ${PYTHON_INCLUDE_DIRS}
+        ${GNURADIO_QTGUI_INCLUDE_DIRS}
+        ${GNURADIO_FFT_INCLUDE_DIRS}
+        )
+ENDIF()
+
 
 link_directories(
     ${Boost_LIBRARY_DIRS}
-    ${GNURADIO_RUNTIME_LIBRARY_DIRS}
-    ${VOLK_LIBRARY_DIRS}
-    ${QT_LIBRARY_DIRS}
-    ${QWT_LIBRARY_DIRS}
-    ${PYTHON_LIBRARY_DIRS}
-    ${GNURADIO_QTGUI_LIBRARY_DIRS}
-    ${GNURADIO_FFT_LIBRARY_DIRS}
 )
 
-
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    link_directories(
+        ${GNURADIO_RUNTIME_LIBRARY_DIRS}
+        ${VOLK_LIBRARY_DIRS}
+        ${QT_LIBRARY_DIRS}
+        ${QWT_LIBRARY_DIRS}
+        ${PYTHON_LIBRARY_DIRS}
+        ${GNURADIO_QTGUI_LIBRARY_DIRS}
+        ${GNURADIO_FFT_LIBRARY_DIRS}
+        )
+ENDIF()
 
 ########################################################################
 # Add subdirectories
 ########################################################################
 add_subdirectory(include)
 add_subdirectory(lib)
-add_subdirectory(swig)
-add_subdirectory(python)
-add_subdirectory(grc)
-add_subdirectory(apps)
 add_subdirectory(volk_fecapi)
+
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    add_subdirectory(swig)
+    add_subdirectory(python)
+    add_subdirectory(grc)
+    add_subdirectory(apps)
+ENDIF()
+
+SET(cmake_configs
+    ${CMAKE_SOURCE_DIR}/cmake/Modules/FecapiConfig.cmake
+    )
+if(NOT CMAKE_MODULES_DIR)
+   set(CMAKE_MODULES_DIR lib/cmake/fec)
+endif(NOT CMAKE_MODULES_DIR)
+
+install(
+  FILES ${cmake_configs}
+  DESTINATION ${CMAKE_MODULES_DIR}
+  COMPONENT "fec_devel"
+)

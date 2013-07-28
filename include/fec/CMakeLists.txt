@@ -17,4 +17,25 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-add_subdirectory(fec)
+########################################################################
+# Install public header files
+########################################################################
+install(FILES
+    fec_api.h
+    generic_decoder.h
+    generic_encoder.h
+    cc_encoder.h
+    cc_decoder.h
+    cc_common.h
+    DESTINATION include/fec
+)
+
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    install(FILES
+        fec_encoder.h
+        fec_decoder.h
+        fec_interleave.h
+        fec_deinterleave.h
+        DESTINATION include/fec
+        )
+ENDIF()

@@ -20,42 +20,40 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_FEC_INTERLEAVE_H
-#define INCLUDED_FEC_INTERLEAVE_H
+#ifndef INCLUDED_FEC_DEINTERLEAVE_H
+#define INCLUDED_FEC_DEINTERLEAVE_H
 
-#include <fec_api.h>
+#include <fec/fec_api.h>
 #include <gnuradio/block.h>
 
-class fec_interleave;
-typedef boost::shared_ptr<fec_interleave> fec_interleave_sptr;
+class fec_deinterleave;
+typedef boost::shared_ptr<fec_deinterleave> fec_deinterleave_sptr;
 
-FEC_API fec_interleave_sptr fec_make_interleave (size_t itemsize, unsigned int blocksize);
+FEC_API fec_deinterleave_sptr fec_make_deinterleave (size_t itemsize, unsigned int blocksize);
 
 /*!
- * \brief interleave N coding blocks to a single output
+ * \brief deinterleave signal input to N coding blocks
  */
-class FEC_API fec_interleave : public gr::block
+class FEC_API fec_deinterleave : public gr::block
 {
-    friend fec_interleave_sptr fec_make_interleave (size_t itemsize, unsigned int blocksize);
+    friend fec_deinterleave_sptr fec_make_deinterleave (size_t itemsize, unsigned int blocksize);
 
+    unsigned int d_current_output;
     size_t d_itemsize;
     unsigned int d_blocksize;
-    unsigned int d_ninputs;
-    fec_interleave (size_t itemsize, unsigned int blocksize);
+    unsigned int d_noutputs;
+    fec_deinterleave (size_t itemsize, unsigned int blocksize);
 
 public:
-  ~fec_interleave ();
+  ~fec_deinterleave ();
 
   int general_work (int noutput_items,
 		    gr_vector_int& ninput_items,
 		    gr_vector_const_void_star &input_items,
 		    gr_vector_void_star &output_items);
-  int fixed_rate_ninput_to_noutput(int ninput);
-  int fixed_rate_noutput_to_ninput(int noutput);
-  void forecast(int noutput_items,
-		gr_vector_int& ninput_items_required);
+
   bool check_topology (int ninputs, int noutputs);
 
 };
 
-#endif /* INCLUDED_FEC_INTERLEAVE_H */
+#endif /* INCLUDED_FEC_DEINTERLEAVE_H */

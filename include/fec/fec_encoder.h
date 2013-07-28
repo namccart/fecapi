@@ -2,9 +2,9 @@
 #define INCLUDED_FEC_ENCODER_H
 
 #include <gnuradio/block.h>
-#include <fec_api.h>
+#include <fec/fec_api.h>
 #include <boost/shared_ptr.hpp>
-#include <generic_encoder.h>
+#include <fec/generic_encoder.h>
 
 
 

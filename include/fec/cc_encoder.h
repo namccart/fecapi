@@ -4,8 +4,8 @@
 
 #include <map>
 #include <string>
-#include <generic_encoder.h>
-#include <cc_common.h>
+#include <fec/generic_encoder.h>
+#include <fec/cc_common.h>
 
 
 FEC_API generic_encoder_sptr
