@@ -27,6 +27,7 @@ install(FILES
     cc_encoder.h
     cc_decoder.h
     cc_common.h
+    attributes.h
     DESTINATION include/fec
 )
 

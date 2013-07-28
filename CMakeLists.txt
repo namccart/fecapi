@@ -109,20 +109,25 @@ endif()
 # Find gnuradio build dependencies
 ########################################################################
 
-set(GR_REQUIRED_COMPONENTS RUNTIME QTGUI FFT)
-find_package(Gnuradio)
-find_package(Volk)
+IF(NOT DISABLE_GNURADIO)
+    SET(CAN_HAS_GNURADIO 'YESS!')
+ELSE()
+    SET(CAN_HAS_GNURADIO 'NOO!')
+ENDIF()
+message("${CAN_HAS_GNURADIO}")
+IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
+    set(GR_REQUIRED_COMPONENTS RUNTIME QTGUI FFT)
+    find_package(Gnuradio)
+    find_package(Volk)    
+ENDIF()
+
 
 find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui)
 find_package(Qwt)
 find_package(PythonLibs)
 
 
-SET(CAN_HAS_GNURADIO 'YESS!')
-if((NOT GNURADIO_RUNTIME_FOUND) OR (NOT QT4_QTCORE FOUND) OR (NOT QWT_FOUND) OR (NOT PYTHONLIBS_FOUND))
-    message("I CAN'T HAS GNURADIO!")
-    SET(CAN_HAS_GNURADIO 'NOO!')
-endif()
+
 
 
 
