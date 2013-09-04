@@ -73,12 +73,11 @@ set(Boost_ADDITIONAL_VERSIONS
 )
 
 IF(NOT DEFINED BOOST_ROOT)
-    SET(BOOST_ROOT "")
+    SET(BOOST_ROOT ${CMAKE_INSTALL_PREFIX})
 ENDIF()
-SET(BOOST_ROOT ${BOOST_ROOT} CACHE STRING "Modify search path for Boost components")
 
 #after caching user-defined value, make sure to add the install prefix
-SET(BOOST_ROOT ${BOOST_ROOT}:${CMAKE_INSTALL_PREFIX})
+#SET(BOOST_ROOT ${BOOST_ROOT}:${CMAKE_INSTALL_PREFIX})
 
 set(BOOST_REQUIRED_COMPONENTS
     system
