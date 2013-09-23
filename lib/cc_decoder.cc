@@ -132,7 +132,7 @@ cc_decoder::cc_decoder (int framebits, int k, int rate, std::vector<int> polys, 
 }
 
 int cc_decoder::destructive() {
-    return 1;
+    return 0;
 }
 
 int cc_decoder::get_output_size() {
