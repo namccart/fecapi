@@ -45,7 +45,9 @@ int generic_decoder::get_input_item_size() {
 int generic_decoder::get_output_item_size() {
     return 1;
 }
-
+int generic_decoder::destructive() {
+    return 1;
+}
 int generic_decoder::base_unique_id = 1;
 int generic_decoder::unique_id() {
   return my_id;

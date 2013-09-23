@@ -32,6 +32,7 @@ class FEC_API cc_decoder : public generic_decoder
     int get_history();
     float get_shift();
     int get_input_item_size();
+    int destructive();
     const char* get_conversion();
     //const char* get_output_conversion();
     //everything else...

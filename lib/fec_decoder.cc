@@ -25,7 +25,7 @@
 #include <fec_decoder.h>
 #include <gnuradio/io_signature.h>
 #include <stdio.h>
-
+#include <boost/bind.hpp>
 
 fec_decoder_sptr
 fec_make_decoder(generic_decoder_sptr my_decoder, size_t input_item_size, size_t output_item_size)
@@ -50,7 +50,13 @@ fec_decoder::fec_decoder(generic_decoder_sptr my_decoder, size_t input_item_size
     //outputs (hence inputs) are made available... this is WEIRD to do in 
     //GNU Radio, and the algorithm is sensitive to this value
     set_output_multiple(my_decoder->get_output_size() + (my_decoder->get_history() ) );
-    d_inbuf = buf_sptr(new unsigned char[(my_decoder->get_input_size() + my_decoder->get_history())*input_item_size]);
+    
+    
+    d_inbuf = buf_sptr(new unsigned char[(my_decoder->get_input_size() + my_decoder->get_history())*input_item_size * my_decoder->destructive()]);
+    
+    d_starts[1] = d_inbuf.get();
+    
+    
     d_decoder = my_decoder;
 
     
@@ -105,10 +111,12 @@ fec_decoder::general_work (int noutput_items,
     
 	
     for(int i = 0; i < items; ++i) {
-        	
-        memcpy((void *)d_inbuf.get(), inBuffer+(i*(d_decoder->get_input_size()) * d_input_item_size), (d_decoder->get_input_size() + d_decoder->get_history()) * d_input_item_size);
-
-        d_decoder->generic_work((void*) d_inbuf.get(), (void*) (outBuffer+(i*d_decoder->get_output_size()*d_output_item_size)));
+        d_starts[0] = inBuffer+(i*(d_decoder->get_input_size()) * d_input_item_size);
+        
+        memcpy((void *)d_inbuf.get(), d_starts[0], (d_decoder->get_input_size() + d_decoder->get_history()) * d_input_item_size * d_decoder->destructive());
+        
+        d_decoder->generic_work((void*) d_starts[d_decoder->destructive()], (void*) (outBuffer+(i*d_decoder->get_output_size()*d_output_item_size)));
+        
     }
     	
 	//printf("consumed %d\n", (int)(((1.0/relative_rate()) * items * (output_multiple() - d_decoder->get_history())) + .5));

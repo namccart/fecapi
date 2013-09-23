@@ -6,6 +6,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/format.hpp>
+#include <boost/function.hpp>
 #include <fec/generic_decoder.h>
 
 
@@ -23,7 +24,7 @@ class FEC_API fec_decoder : public gr::block
   size_t d_input_item_size;
   size_t d_output_item_size;
   buf_sptr d_inbuf;
-
+  const unsigned char* d_starts[2];
  public:
   int general_work (int noutput_items,
 		    gr_vector_int& ninput_items,

@@ -27,6 +27,7 @@ class FEC_API generic_decoder {
     virtual int get_input_item_size();
     virtual int get_output_item_size();
     virtual const char* get_output_conversion();
+    virtual int destructive();
     virtual ~generic_decoder();
     generic_decoder(std::string name);
     
