@@ -39,11 +39,11 @@ const char* fec_get_output_conversion(generic_decoder_sptr my_decoder);
 
 GR_SWIG_BLOCK_MAGIC(fec,decoder);
 
-fec_decoder_sptr fec_make_decoder(generic_decoder_sptr my_decoder, size_t input_item_size, size_t output_item_size);
+fec_decoder_sptr fec_make_decoder(generic_decoder_sptr my_decoder);
 		
 class fec_decoder : public gr::block
 {
  private:
-    fec_decoder(generic_decoder_sptr, size_t, size_t);
+    fec_decoder(generic_decoder_sptr);
     
 };

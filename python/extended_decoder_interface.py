@@ -3,6 +3,7 @@ import fec
 from fec.threaded_decoder import threaded_decoder
 from fec.capillary_threaded_decoder import capillary_threaded_decoder
 from fec.bitflip import read_bitlist, read_big_bitlist
+import exceptions
 
 class extended_decoder_interface(gr.hier_block2):
 
@@ -70,8 +71,8 @@ class extended_decoder_interface(gr.hier_block2):
         message_collector_connected=False;
 
         
-        ##anything going through the annihilator needs shifted, uchar vals
         
+        ##uchars and packed bits get mapped to shifted unpacked bits first
         if fec.get_conversion(decoder_obj_list[0]) == "uchar" or fec.get_conversion(decoder_obj_list[0]) == "packed_bits":
             self.blocks.append(blocks.multiply_const_ff(48.0));
 
@@ -90,9 +91,13 @@ class extended_decoder_interface(gr.hier_block2):
             flush = 10000;
         else:
             flush = self.flush;
+
+        ##anything going through the annihilator needs shifted, uchar vals
+        ann_supported = ["uchar","packed_bits"]
         if self.ann: #ann and puncpat are strings of 0s and 1s 
-            
-            
+            if not fec.get_conversion(decoder_obj_list[0]) in ann_supported:
+                raise exceptions.TypeError('fec_corr_bb takes shifted uchar (fixed point), so ann!=None requires conversion in' + str(ann_supported));
+                                           
             cat = fec.ULLVector();
             for i in read_big_bitlist(ann):
                 cat.append(i);
@@ -107,14 +112,16 @@ class extended_decoder_interface(gr.hier_block2):
             print 'using syndrom garble threshold ' + str(synd_garble) + 'for corr_bb' 
             print 'ceiling: .0335 data garble rate'
             self.blocks.append(fec.corr_bb(cat, len(puncpat) - puncpat.count('0'), len(ann), integration_period, flush, synd_garble));
-            
+                               
 
          
         
             
         #print puncpat
+        pp_supported = ann_supported
         if self.puncpat != '11':
-            
+            if not fec.get_conversion(decoder_obj_list[0]) in pp_supported:
+                raise exceptions.TypeError('fec_reinflate_bb takes shifted uchar (fixed point), so pp!=\'11\' requires conversion in' + str(pp_supported));
             self.blocks.append(fec.reinflate_bb(0, read_bitlist(puncpat), puncpat.count('0'), len(puncpat)));
 
         if fec.get_conversion(decoder_obj_list[0]) == "packed_bits":
@@ -126,13 +133,13 @@ class extended_decoder_interface(gr.hier_block2):
         if(len(decoder_obj_list) > 1):
             assert fec.get_history(decoder_obj_list[0]) == 0;
         if threading == 'capillary':
-            self.blocks.append(capillary_threaded_decoder(decoder_obj_list, fec.get_decoder_input_item_size(decoder_obj_list[0]), fec.get_decoder_output_item_size(decoder_obj_list[0])))
+            self.blocks.append(capillary_threaded_decoder(decoder_obj_list))
             
         elif threading == 'ordinary':
-            self.blocks.append(threaded_decoder(decoder_obj_list, fec.get_decoder_input_item_size(decoder_obj_list[0]), fec.get_decoder_output_item_size(decoder_obj_list[0])))
+            self.blocks.append(threaded_decoder(decoder_obj_list))
             
         else:
-            self.blocks.append(fec.decoder(decoder_obj_list[0], fec.get_decoder_input_item_size(decoder_obj_list[0]), fec.get_decoder_output_item_size(decoder_obj_list[0])))
+            self.blocks.append(fec.decoder(decoder_obj_list[0]))
             
 
         

@@ -14,12 +14,12 @@
 class fec_decoder;
 typedef boost::shared_ptr<fec_decoder> fec_decoder_sptr;
 typedef boost::shared_array<unsigned char> buf_sptr;
-FEC_API fec_decoder_sptr fec_make_decoder(generic_decoder_sptr my_decoder, size_t input_item_size, size_t output_item_size);
+FEC_API fec_decoder_sptr fec_make_decoder(generic_decoder_sptr my_decoder);
 
 class FEC_API fec_decoder : public gr::block
 {
-  friend fec_decoder_sptr fec_make_decoder(generic_decoder_sptr my_decoder, size_t input_item_size, size_t output_item_size);
-  fec_decoder(generic_decoder_sptr my_decoder, size_t input_item_size, size_t output_item_size);
+  friend fec_decoder_sptr fec_make_decoder(generic_decoder_sptr my_decoder);
+  fec_decoder(generic_decoder_sptr my_decoder);
   generic_decoder_sptr d_decoder;
   size_t d_input_item_size;
   size_t d_output_item_size;

@@ -27,31 +27,53 @@
 #include <stdio.h>
 
 generic_decoder::~generic_decoder() {;}
+
+//fec_decoder:
+//number items overlapped on input stream per generic_work call
 int generic_decoder::get_history() {
     return 0;
 }
+
+//extended_decoder_interface: add this value to soft input (part of conversion to fixed)
 float generic_decoder::get_shift() {
     return 0.0;
 }
+
+ 
+//extended_decoder_interface: float->
+//>>"none" (unchanged)
+//>>"uchar"
+//>>"packed_bits"
 const char* generic_decoder::get_conversion() {
     return "none";
 }
+
+//extended_decoder_interface: ->unpacked_bits
+//>>"none" (unchanged)
+//>>"unpack"
 const char* generic_decoder::get_output_conversion() {
     return "none";
 }
+
 int generic_decoder::get_input_item_size() {
     return 4;
 }
+
 int generic_decoder::get_output_item_size() {
     return 1;
 }
+
 int generic_decoder::destructive() {
-    return 1;
+    return 0;
 }
 int generic_decoder::base_unique_id = 1;
 int generic_decoder::unique_id() {
   return my_id;
 }
+void generic_decoder::set_framebits(int framebits) {
+    d_framebits = framebits;
+}
+
 generic_decoder::generic_decoder(std::string name) {
   d_name = name;
   my_id = base_unique_id++;

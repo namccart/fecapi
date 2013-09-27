@@ -20,7 +20,7 @@ cc_make_decoder (int framebits, int k, int rate, std::vector<int> polys, int sta
 
 class FEC_API cc_decoder : public generic_decoder
 {
-    
+ protected:    
     
     //befriend the global, swigged make function
     friend generic_decoder_sptr

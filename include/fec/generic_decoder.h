@@ -8,6 +8,9 @@
 #include <boost/format.hpp>
 
 
+
+        
+
 class FEC_API generic_decoder {
  protected:
     
@@ -16,8 +19,10 @@ class FEC_API generic_decoder {
     int unique_id();
     std::string d_name;
     std::string alias(){ return (boost::format("%s%d")%d_name%unique_id()).str(); }
+    static d_framebits;
 
  public:
+    typedef boost::shared_ptr<generic_decoder> sptr;
     virtual void generic_work(void *inBuffer, void *outBuffer) = 0;
     virtual int get_input_size() = 0;
     virtual int get_output_size() = 0;
@@ -29,6 +34,7 @@ class FEC_API generic_decoder {
     virtual const char* get_output_conversion();
     virtual int destructive();
     virtual ~generic_decoder();
+    virtual void set_framebits(int framebits);
     generic_decoder(std::string name);
     
 };

@@ -28,17 +28,17 @@
 #include <boost/bind.hpp>
 
 fec_decoder_sptr
-fec_make_decoder(generic_decoder_sptr my_decoder, size_t input_item_size, size_t output_item_size)
+fec_make_decoder(generic_decoder_sptr my_decoder)
 {
-    return gnuradio::get_initial_sptr( new fec_decoder(my_decoder, input_item_size, output_item_size));
+    return gnuradio::get_initial_sptr( new fec_decoder(my_decoder));
 }
 
 
-fec_decoder::fec_decoder(generic_decoder_sptr my_decoder, size_t input_item_size, size_t output_item_size)
-  : gr::block("fec_decoder",
-	       gr::io_signature::make(1, 1, input_item_size),
-	       gr::io_signature::make(1, 1, output_item_size)),
-      d_input_item_size(input_item_size), d_output_item_size(output_item_size)
+fec_decoder::fec_decoder(generic_decoder_sptr my_decoder)
+    : gr::block("fec_decoder",
+                gr::io_signature::make(1, 1, my_decoder->get_input_item_size()),
+                gr::io_signature::make(1, 1, my_decoder->get_output_item_size())),
+      d_input_item_size(my_decoder->get_input_item_size()), d_output_item_size(my_decoder->get_output_item_size())
     
 {
     
@@ -52,7 +52,7 @@ fec_decoder::fec_decoder(generic_decoder_sptr my_decoder, size_t input_item_size
     set_output_multiple(my_decoder->get_output_size() + (my_decoder->get_history() ) );
     
     
-    d_inbuf = buf_sptr(new unsigned char[(my_decoder->get_input_size() + my_decoder->get_history())*input_item_size * my_decoder->destructive()]);
+    d_inbuf = buf_sptr(new unsigned char[(my_decoder->get_input_size() + my_decoder->get_history())*d_input_item_size * my_decoder->destructive()]);
     
     d_starts[1] = d_inbuf.get();
     
