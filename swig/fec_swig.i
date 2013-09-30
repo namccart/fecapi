@@ -27,6 +27,8 @@ namespace std {
 %include <fec_reinflate_bb.i>
 %include <fec_puncture_ff.i>
 %include <ber_sink_b.i>
+%include <fec_tagged_decoder.i>
+%include <rs_decoder.i>
 #if SWIGGUILE
 %scheme %{
 (load-extension-global "libguile-gnuradio-howto_swig" "scm_init_gnuradio_howto_swig_module")

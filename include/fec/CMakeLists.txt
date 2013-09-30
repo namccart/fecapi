@@ -26,8 +26,11 @@ install(FILES
     generic_encoder.h
     cc_encoder.h
     cc_decoder.h
+    rs_decoder.h
     cc_common.h
     attributes.h
+    pooled_resource.h
+    pooled_decoder.h
     DESTINATION include/fec
 )
 
@@ -35,6 +38,8 @@ IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
     install(FILES
         fec_encoder.h
         fec_decoder.h
+        fec_tagged_decoder.h
+        
         fec_interleave.h
         fec_deinterleave.h
         DESTINATION include/fec

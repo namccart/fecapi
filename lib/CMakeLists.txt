@@ -25,6 +25,7 @@
 
 add_library(fec SHARED
     cc_decoder.cc
+    rs_decoder.cc
     generic_decoder.cc
     generic_encoder.cc
     cc_encoder.cc
@@ -55,6 +56,7 @@ IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
         fec_reinflate_bb.cc
         fec_puncture_ff.cc
         ber_sink_b_impl.cc
+        fec_tagged_decoder.cc
         )
 
     target_link_libraries(gr-fec 

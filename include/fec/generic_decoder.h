@@ -19,7 +19,7 @@ class FEC_API generic_decoder {
     int unique_id();
     std::string d_name;
     std::string alias(){ return (boost::format("%s%d")%d_name%unique_id()).str(); }
-    static d_framebits;
+    int d_framebits;
 
  public:
     typedef boost::shared_ptr<generic_decoder> sptr;

@@ -72,6 +72,7 @@ int generic_decoder::unique_id() {
 }
 void generic_decoder::set_framebits(int framebits) {
     d_framebits = framebits;
+    return;
 }
 
 generic_decoder::generic_decoder(std::string name) {
