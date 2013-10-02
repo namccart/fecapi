@@ -114,7 +114,7 @@ ELSE()
 ENDIF()
 
 IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
-    set(GR_REQUIRED_COMPONENTS RUNTIME QTGUI FFT)
+    set(GR_REQUIRED_COMPONENTS RUNTIME QTGUI FFT FEC)
     find_package(Gnuradio)
     find_package(Volk)    
 ENDIF()

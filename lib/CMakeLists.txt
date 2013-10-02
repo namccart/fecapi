@@ -25,7 +25,6 @@
 
 add_library(fec SHARED
     cc_decoder.cc
-    rs_decoder.cc
     generic_decoder.cc
     generic_encoder.cc
     cc_encoder.cc
@@ -45,6 +44,7 @@ IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
     
     add_library(gr-fec SHARED
         libbertools.cc
+        rs_decoder.cc
         fec_random_gen_b.cc
         fec_encoder.cc
         fec_gaussnoise_ff.cc
@@ -67,6 +67,7 @@ IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
         ${GNURADIO_RUNTIME_LIBRARIES}
         ${GNURADIO_QTGUI_LIBRARIES}
         ${GNURADIO_FFT_LIBRARIES}
+        ${GNURADIO_FEC_LIBRARIES}
         volk_fecapi
         fec
         )
