@@ -171,3 +171,11 @@ add_subdirectory(python)
 add_subdirectory(grc)
 add_subdirectory(apps)
 add_subdirectory(volk_fecapi)
+
+########################################################################
+# Install cmake search helper for this library
+########################################################################
+install(FILES cmake/Modules/fecapiConfig.cmake        
+    DESTINATION lib/cmake/fecapi
+)
+
