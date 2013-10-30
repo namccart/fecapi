@@ -191,7 +191,7 @@ IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
 ENDIF()
 
 SET(cmake_configs
-    ${CMAKE_SOURCE_DIR}/cmake/Modules/FecapiConfig.cmake
+    ${CMAKE_SOURCE_DIR}/cmake/Modules/fecConfig.cmake
     )
 if(NOT CMAKE_MODULES_DIR)
    set(CMAKE_MODULES_DIR lib/cmake/fec)
