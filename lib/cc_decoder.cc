@@ -449,6 +449,7 @@ cc_decoder::~cc_decoder()
     free(d_vp->decisions);
     free(Branchtab);
     free(d_vp->metrics);
+    delete d_vp;
 }
 
 
