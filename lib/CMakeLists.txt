@@ -36,6 +36,27 @@ target_link_libraries(fec
 )
 set_target_properties(fec PROPERTIES DEFINE_SYMBOL "fec_EXPORTS")
 
+#######################################################
+# STATIC LIB BUILD
+#######################################################
+if(ENABLE_STATIC_LIBS)
+
+    add_library(fec_static STATIC
+        cc_decoder.cc
+        generic_decoder.cc
+        generic_encoder.cc
+        cc_encoder.cc
+    )
+
+    set_target_properties(fec_static PROPERTIES OUTPUT_NAME fec)
+    install(TARGETS fec_static
+        LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
+        ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
+        RUNTIME DESTINATION bin              # .dll file
+    )
+
+endif()
+
 
 IF(${CAN_HAS_GNURADIO} STREQUAL 'YESS!')
     include(GrPlatform) #define LIB_SUFFIX

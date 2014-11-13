@@ -32,7 +32,7 @@
 static size_t __alignment = 0;
 static intptr_t __alignment_mask = 0;
 
-struct volk_fecapi_machine *get_machine(void) {
+struct volk_fecapi_machine *volk_fecapi_get_machine(void) {
     extern struct volk_fecapi_machine *volk_fecapi_machines[];
     extern unsigned int n_volk_fecapi_machines;
     static struct volk_fecapi_machine *machine = NULL;
@@ -58,7 +58,7 @@ struct volk_fecapi_machine *get_machine(void) {
 
 size_t volk_fecapi_get_alignment(void)
 {
-    get_machine(); //ensures alignment is set
+    volk_fecapi_get_machine(); //ensures alignment is set
     return __alignment;
 }
 
@@ -102,15 +102,15 @@ static inline void __$(kern.name)_d($kern.arglist_full)
 
 static inline void __init_$(kern.name)(void)
 {
-    const char *name = get_machine()->$(kern.name)_name;
-    const char **impl_names = get_machine()->$(kern.name)_impl_names;
-    const int *impl_deps = get_machine()->$(kern.name)_impl_deps;
-    const bool *alignment = get_machine()->$(kern.name)_impl_alignment;
-    const size_t n_impls = get_machine()->$(kern.name)_n_impls;
+    const char *name = volk_fecapi_get_machine()->$(kern.name)_name;
+    const char **impl_names = volk_fecapi_get_machine()->$(kern.name)_impl_names;
+    const int *impl_deps = volk_fecapi_get_machine()->$(kern.name)_impl_deps;
+    const bool *alignment = volk_fecapi_get_machine()->$(kern.name)_impl_alignment;
+    const size_t n_impls = volk_fecapi_get_machine()->$(kern.name)_n_impls;
     const size_t index_a = volk_fecapi_rank_archs(name, impl_names, impl_deps, alignment, n_impls, true/*aligned*/);
     const size_t index_u = volk_fecapi_rank_archs(name, impl_names, impl_deps, alignment, n_impls, false/*unaligned*/);
-    $(kern.name)_a = get_machine()->$(kern.name)_impls[index_a];
-    $(kern.name)_u = get_machine()->$(kern.name)_impls[index_u];
+    $(kern.name)_a = volk_fecapi_get_machine()->$(kern.name)_impls[index_a];
+    $(kern.name)_u = volk_fecapi_get_machine()->$(kern.name)_impls[index_u];
 
     assert($(kern.name)_a);
     assert($(kern.name)_u);
@@ -143,20 +143,20 @@ $kern.pname $(kern.name)   = &__$(kern.name);
 void $(kern.name)_manual($kern.arglist_full, const char* impl_name)
 {
     const int index = volk_fecapi_get_index(
-        get_machine()->$(kern.name)_impl_names,
-        get_machine()->$(kern.name)_n_impls,
+        volk_fecapi_get_machine()->$(kern.name)_impl_names,
+        volk_fecapi_get_machine()->$(kern.name)_n_impls,
         impl_name
     );
-    get_machine()->$(kern.name)_impls[index](
+    volk_fecapi_get_machine()->$(kern.name)_impls[index](
         $kern.arglist_names
     );
 }
 
 volk_fecapi_func_desc_t $(kern.name)_get_func_desc(void) {
-    const char **impl_names = get_machine()->$(kern.name)_impl_names;
-    const int *impl_deps = get_machine()->$(kern.name)_impl_deps;
-    const bool *alignment = get_machine()->$(kern.name)_impl_alignment;
-    const size_t n_impls = get_machine()->$(kern.name)_n_impls;
+    const char **impl_names = volk_fecapi_get_machine()->$(kern.name)_impl_names;
+    const int *impl_deps = volk_fecapi_get_machine()->$(kern.name)_impl_deps;
+    const bool *alignment = volk_fecapi_get_machine()->$(kern.name)_impl_alignment;
+    const size_t n_impls = volk_fecapi_get_machine()->$(kern.name)_n_impls;
     volk_fecapi_func_desc_t desc = {
         impl_names,
         impl_deps,

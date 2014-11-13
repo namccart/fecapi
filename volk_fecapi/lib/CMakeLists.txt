@@ -326,6 +326,21 @@ install(TARGETS volk_fecapi
     RUNTIME DESTINATION bin              COMPONENT "volk_fecapi_runtime" # .dll file
 )
 
+#######################################################
+# STATIC LIB BUILD
+#######################################################
+if(ENABLE_STATIC_LIBS)
+
+    add_library(volk_fecapi_static STATIC ${volk_fecapi_sources})
+    set_target_properties(volk_fecapi_static PROPERTIES DEFINE_SYMBOL "volk_fecapi_EXPORTS")
+    set_target_properties(volk_fecapi_static PROPERTIES OUTPUT_NAME volk_fecapi)
+    install(TARGETS volk_fecapi_static
+        LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT "volk_fecapi_runtime" # .so file
+        ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT "volk_fecapi_devel"   # .lib file
+        RUNTIME DESTINATION bin              COMPONENT "volk_fecapi_runtime" # .dll file
+    )
+endif()
+
 ########################################################################
 # Build the QA test application
 ########################################################################
