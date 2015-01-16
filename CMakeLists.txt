@@ -56,6 +56,8 @@ if(CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32)
 endif()
 
 
+OPTION(ENABLE_STATIC_LIBS "Enable building of static libraries" OFF)
+message(STATUS "Building Static Libraries: ${ENABLE_STATIC_LIBS}")
 
 ########################################################################
 # Find boost
